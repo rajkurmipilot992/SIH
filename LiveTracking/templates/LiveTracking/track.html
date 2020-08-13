@@ -1,0 +1,58 @@
+{% include 'Main/base.html' %}
+<script src="https://api.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.css" rel="stylesheet" />
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-3 bg-light">
+
+        </div>
+        <div class="col-9 p-0" id='map' style='width: 100%; height: 80vh;'></div>
+    </div>
+</div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoicmFqc29uaTAzIiwiYSI6ImNrNThmY25tYTA3MWwzbG50bzdndXZ5ZngifQ.-fSnHZymHAiDIUBKSuQGAQ';
+var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v11',
+    center: {{center_point}},
+    zoom: {{map_zoom}}
+});
+
+map.on('load', function() {
+    map.addLayer({
+        'id': 'lines',
+        'type': 'line',
+        'source': {
+            'type': 'geojson',
+            'data': {
+                'type': 'FeatureCollection',
+                'features': [{
+                        'type': 'Feature',
+                        'properties': {
+                            'color': '#00ff00' // green
+                        },
+                        'geometry': {
+                            'type': 'LineString',
+                            'coordinates':  {{list_of_green}}
+                        }
+                    },
+                    {
+                        'type': 'Feature',
+                        'properties': {
+                            'color': '#F7455D' // red
+                        },
+                        'geometry': {
+                            'type': 'LineString',
+                            'coordinates':   {{list_of_red}}
+                        }
+                    }
+                ]
+            }
+        },
+        'paint': {
+            'line-width': 3,
+            'line-color': ['get', 'color']
+        }
+    });
+});
+</script>
